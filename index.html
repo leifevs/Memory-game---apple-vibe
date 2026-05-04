@@ -6,17 +6,10 @@
 <title>Diamond Memory</title>
 
 <style>
-:root {
-  --bg: #0f1115;
-  --card: #1c1f26;
-  --accent: #ffffff;
-  --blur: blur(20px);
-}
-
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  background: linear-gradient(145deg, #0f1115, #1a1d24);
+  background: radial-gradient(circle at top, #1b1f2a, #0b0d12);
   color: white;
   display: flex;
   justify-content: center;
@@ -24,265 +17,271 @@ body {
   height: 100vh;
 }
 
-/* Container */
+/* APP WRAPPER */
 .app {
   width: 100%;
   max-width: 420px;
   padding: 20px;
 }
 
-/* Glass UI */
-.glass {
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: var(--blur);
-  border-radius: 20px;
+/* GLASS PANEL */
+.panel {
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(25px);
+  border-radius: 22px;
   padding: 20px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
 }
 
-/* Buttons */
+h1 {
+  font-weight: 600;
+  font-size: 20px;
+  margin: 0 0 15px 0;
+  opacity: 0.95;
+}
+
 button {
   background: rgba(255,255,255,0.08);
   border: none;
-  padding: 12px;
-  border-radius: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
   color: white;
   font-size: 14px;
-  margin: 5px;
+  margin: 6px;
   cursor: pointer;
-  transition: 0.2s;
+  transition: 0.2s ease;
 }
 button:hover {
-  background: rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.16);
+  transform: translateY(-1px);
 }
 
-/* Board */
+/* BOARD */
 .board {
   display: grid;
   gap: 10px;
-  margin-top: 20px;
+  margin-top: 15px;
 }
 
-/* Cards */
+/* CARD */
 .card {
   aspect-ratio: 1;
-  border-radius: 14px;
   position: relative;
   transform-style: preserve-3d;
-  transition: transform 0.4s ease;
+  transition: transform 0.55s cubic-bezier(.2,.8,.2,1);
+  border-radius: 16px;
 }
 
-.card.flip {
+.card.flipped {
   transform: rotateY(180deg);
 }
 
-.face {
+.side {
   position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 14px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  inset: 0;
+  border-radius: 16px;
   backface-visibility: hidden;
 }
 
+/* FRONT */
 .front {
-  background: var(--card);
+  background: rgba(255,255,255,0.06);
 }
 
+/* BACK */
 .back {
   transform: rotateY(180deg);
-}
-
-/* Diamond shapes */
-.diamond {
-  width: 60%;
-  height: 60%;
-  clip-path: polygon(50% 0%, 100% 40%, 80% 100%, 20% 100%, 0% 40%);
-}
-
-/* Color variants */
-.c1 { background: linear-gradient(135deg,#00f5ff,#00aaff); }
-.c2 { background: linear-gradient(135deg,#ff00d4,#ff6a00); }
-.c3 { background: linear-gradient(135deg,#7cff00,#00ff9d); }
-.c4 { background: linear-gradient(135deg,#ffd900,#ff8800); }
-.c5 { background: linear-gradient(135deg,#9b5cff,#5c9bff); }
-.c6 { background: linear-gradient(135deg,#ff4d6d,#ff9a9e); }
-.c7 { background: linear-gradient(135deg,#00ffe0,#0088ff); }
-.c8 { background: linear-gradient(135deg,#ffffff,#aaaaaa); }
-
-/* Variations */
-.shape2 { clip-path: polygon(50% 0%, 90% 50%, 50% 100%, 10% 50%); }
-.shape3 { clip-path: polygon(50% 0%, 100% 30%, 75% 100%, 25% 100%, 0% 30%); }
-.shape4 { border-radius: 50%; }
-
-h1 {
-  font-weight: 500;
-  font-size: 22px;
-  margin-bottom: 10px;
-}
-
-.topbar {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 }
 
-.hidden {
-  display: none;
+/* DIAMONDS */
+.diamond {
+  width: 60%;
+  height: 60%;
+  clip-path: polygon(50% 0%, 100% 35%, 80% 100%, 20% 100%, 0% 35%);
+  filter: drop-shadow(0 0 12px rgba(255,255,255,0.25));
+}
+
+/* COLORS */
+.c1 { background: linear-gradient(135deg,#00e5ff,#0066ff); }
+.c2 { background: linear-gradient(135deg,#ff00cc,#ff5e00); }
+.c3 { background: linear-gradient(135deg,#00ff88,#00c2ff); }
+.c4 { background: linear-gradient(135deg,#ffe600,#ff7b00); }
+.c5 { background: linear-gradient(135deg,#9d4edd,#3a86ff); }
+.c6 { background: linear-gradient(135deg,#ff4d6d,#ffb3c1); }
+
+/* STATUS */
+.status {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  opacity: 0.8;
+  margin-bottom: 10px;
 }
 </style>
 </head>
 
 <body>
 <div class="app">
-  <div id="menu" class="glass">
+
+  <div id="menu" class="panel">
     <h1>💎 Diamond Memory</h1>
 
     <div>
       <p>Antall kort</p>
-      <button onclick="startGame(16)">16</button>
-      <button onclick="startGame(24)">24</button>
+      <button onclick="start(16)">16</button>
+      <button onclick="start(24)">24</button>
     </div>
 
     <div>
-      <p>Spillmodus</p>
-      <button onclick="setMode('pvp')">Mot venn</button>
-      <button onclick="setMode('bot')">Mot bot</button>
+      <p>Modus</p>
+      <button onclick="mode='pvp'">2 Spillere</button>
+      <button onclick="mode='bot'">Mot Bot</button>
     </div>
   </div>
 
-  <div id="game" class="hidden">
-    <div class="topbar">
-      <div id="status"></div>
-      <button onclick="restart()">↺</button>
+  <div id="game" class="panel" style="display:none;">
+    <div class="status">
+      <div id="turn"></div>
+      <div id="score"></div>
     </div>
     <div id="board" class="board"></div>
   </div>
+
 </div>
 
 <script>
 let mode = "pvp";
 let size = 16;
+
 let first = null;
 let lock = false;
 let turn = 1;
-let scores = [0,0];
+let score = [0,0];
 
-function setMode(m) {
-  mode = m;
-}
+let memory = {}; // bot memory
 
-function startGame(s) {
+function start(s){
   size = s;
-  document.getElementById("menu").classList.add("hidden");
-  document.getElementById("game").classList.remove("hidden");
-  setupBoard();
+  document.getElementById("menu").style.display="none";
+  document.getElementById("game").style.display="block";
+  setup();
 }
 
-function restart() {
-  location.reload();
-}
-
-function setupBoard() {
+function setup(){
   const board = document.getElementById("board");
-  board.innerHTML = "";
+  board.innerHTML="";
 
-  const cols = size === 16 ? 4 : 6;
+  const cols = size===16 ? 4 : 6;
   board.style.gridTemplateColumns = `repeat(${cols},1fr)`;
 
-  let pairs = size / 2;
-  let items = [];
-
-  for (let i=0;i<pairs;i++) {
-    items.push(i,i);
+  let values = [];
+  for(let i=0;i<size/2;i++){
+    values.push(i,i);
   }
 
-  items.sort(()=>Math.random()-0.5);
+  values.sort(()=>Math.random()-0.5);
 
-  items.forEach(i => {
+  values.forEach((v,i)=>{
     const card = document.createElement("div");
-    card.className = "card";
-    card.dataset.value = i;
+    card.className="card";
+    card.dataset.value=v;
 
-    const shapeClass = ["","shape2","shape3","shape4"][i%4];
-    const colorClass = "c"+((i%8)+1);
-
-    card.innerHTML = `
-      <div class="face front"></div>
-      <div class="face back">
-        <div class="diamond ${shapeClass} ${colorClass}"></div>
+    card.innerHTML=`
+      <div class="side front"></div>
+      <div class="side back">
+        <div class="diamond c${(v%6)+1}"></div>
       </div>
     `;
 
-    card.onclick = () => flip(card);
+    card.onclick=()=>flip(card);
     board.appendChild(card);
   });
 
-  updateStatus();
+  updateUI();
 }
 
-function flip(card) {
-  if (lock || card.classList.contains("flip")) return;
+function flip(card){
+  if(lock || card.classList.contains("flipped")) return;
 
-  card.classList.add("flip");
+  card.classList.add("flipped");
 
-  if (!first) {
+  if(!first){
     first = card;
     return;
   }
 
-  if (first.dataset.value === card.dataset.value) {
-    scores[turn-1]++;
+  // match
+  if(first.dataset.value === card.dataset.value){
+    score[turn-1]++;
     first = null;
-    updateStatus();
+    updateUI();
     checkWin();
-  } else {
-    lock = true;
-    setTimeout(()=>{
-      card.classList.remove("flip");
-      first.classList.remove("flip");
-      first = null;
-      lock = false;
-      nextTurn();
-    },700);
+    return;
+  }
+
+  // mismatch
+  lock=true;
+
+  setTimeout(()=>{
+    card.classList.remove("flipped");
+    first.classList.remove("flipped");
+    first=null;
+    lock=false;
+    nextTurn();
+  },650);
+}
+
+function nextTurn(){
+  turn = turn===1?2:1;
+  updateUI();
+
+  if(mode==="bot" && turn===2){
+    botPlay();
   }
 }
 
-function nextTurn() {
-  turn = turn === 1 ? 2 : 1;
-  updateStatus();
+function botPlay(){
+  const cards=[...document.querySelectorAll(".card:not(.flipped)")];
+  if(cards.length<2) return;
 
-  if (mode === "bot" && turn === 2) {
-    botMove();
+  // smarter bot: sometimes remembers
+  let pick1, pick2;
+
+  for(let c of cards){
+    let v=c.dataset.value;
+    if(memory[v] && memory[v]!==c){
+      pick1 = c;
+      pick2 = memory[v];
+      break;
+    }
   }
+
+  if(!pick1){
+    pick1 = cards[Math.floor(Math.random()*cards.length)];
+    pick2 = cards.filter(c=>c!==pick1)[Math.floor(Math.random()*(cards.length-1))];
+  }
+
+  setTimeout(()=>flip(pick1),400);
+  setTimeout(()=>flip(pick2),1000);
 }
 
-function botMove() {
-  const cards = [...document.querySelectorAll(".card:not(.flip)")];
-  if (cards.length < 2) return;
-
-  let c1 = cards[Math.floor(Math.random()*cards.length)];
-  let c2 = cards.filter(c=>c!==c1)[Math.floor(Math.random()*(cards.length-1))];
-
-  setTimeout(()=>flip(c1),300);
-  setTimeout(()=>flip(c2),800);
+function updateUI(){
+  document.getElementById("turn").innerText = `Spiller ${turn}`;
+  document.getElementById("score").innerText = `${score[0]} - ${score[1]}`;
 }
 
-function updateStatus() {
-  document.getElementById("status").innerText =
-    `Spiller ${turn} | ${scores[0]} - ${scores[1]}`;
-}
-
-function checkWin() {
-  if (document.querySelectorAll(".card:not(.flip)").length === 0) {
+function checkWin(){
+  if(document.querySelectorAll(".card:not(.flipped)").length===0){
     setTimeout(()=>{
-      alert(scores[0] === scores[1]
-        ? "Uavgjort!"
-        : `Spiller ${scores[0]>scores[1]?1:2} vinner!`);
+      alert(score[0]===score[1]?"Uavgjort!":
+      `Spiller ${score[0]>score[1]?1:2} vinner!`);
     },300);
   }
 }
 </script>
+
 </body>
 </html>
